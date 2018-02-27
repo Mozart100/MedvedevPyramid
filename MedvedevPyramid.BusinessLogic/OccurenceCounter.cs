@@ -12,50 +12,51 @@ namespace MedvedevPyramid.BusinessLogic
         public int Frequence { get; set; }
     }
 
+
+         
     public class OccurenceCounter
     {
-        private Dictionary<int, Report> _reports;
-
         //--------------------------------------------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------------------------------
 
         public OccurenceCounter()
         {
-            _reports = new Dictionary<int, Report>();
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------------------------------
 
-        public IEnumerable<Report> VerifyOccurences(PlainItem root)
+        public IEnumerable<Report> CountOccurences(PlainItem root)
         {
-            Analyze(root);
+            var reports = new Dictionary<int, Report>();
+            Analyze(root, reports);
 
 
-            return _reports.Values;
+            return reports.Values.OrderByDescending(x => x.Frequence);
         }
 
         //--------------------------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------------------------------
 
-        private void Analyze(PlainItem root, int sum = 0)
+        private void Analyze(PlainItem root, Dictionary<int, Report> reports, int sum = 0)
         {
             if (root.HasChildren() == false)
             {
                 var totalSum = sum + root.Item;
-                if (_reports.ContainsKey(totalSum) == false)
+                if (reports.ContainsKey(totalSum) == false)
                 {
-                    _reports[totalSum] = new Report { Frequence = 1, Sum = totalSum };
+                    reports[totalSum] = new Report { Frequence = 1, Sum = totalSum };
                 }
                 else
                 {
-                    _reports[totalSum].Frequence++;
+                    reports[totalSum].Frequence++;
                 }
 
                 return;
             }
 
-            Analyze(root.Left, sum + root.Item);
-            Analyze(root.Right, sum + root.Item);
+            Analyze(root.Left, reports, sum + root.Item);
+            Analyze(root.Right, reports,sum + root.Item);
 
         }
 

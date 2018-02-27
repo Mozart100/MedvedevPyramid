@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MedvedevPyramid.BusinessLogic;
+using System.Linq;
 
 namespace MedvedevPyramid.BusinessLogic.UnitTest
 {
@@ -66,8 +67,11 @@ namespace MedvedevPyramid.BusinessLogic.UnitTest
 
             var occurenceCounter = new OccurenceCounter();
 
-            var reports = occurenceCounter.VerifyOccurences(root);
+            var reports = occurenceCounter.CountOccurences(root);
 
+            var report = reports.First();
+            Assert.AreEqual(report.Frequence, 2);
+            Assert.AreEqual(report.Sum, 159);
 
 
 
